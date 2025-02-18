@@ -36,9 +36,9 @@
             margin-top: 20px;
         }
         .input-field {
-            background: #ffffff;
-            color: #333333;
-            border: 1px solid #ccc;
+            background: #d3d3d3;
+            color: white;
+            border: none;
             padding: 10px;
             width: 70%;
             border-radius: 5px;
@@ -57,18 +57,6 @@
         button:hover {
             background: #45a049;
         }
-        .confirmation-message {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #4CAF50;
-            font-weight: bold;
-        }
-        .error-message {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #ff3b30;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
@@ -81,18 +69,11 @@
         <p><strong>Startgebot: 25 CHF</strong></p>
     </div>
     <div class="countdown" id="countdown">Loading...</div>
-    <form class="bid-form" id="bidForm">
+    <form class="bid-form">
         <input class="input-field" type="text" placeholder="Dein Name" required>
-        <input class="input-field" type="number" id="bidAmount" placeholder="Dein Gebot (CHF)" required min="25">
+        <input class="input-field" type="number" placeholder="Dein Gebot (CHF)" required min="25">
         <button type="submit">Gebot abgeben</button>
     </form>
-    <div class="confirmation-message" id="confirmationMessage" style="display: none;">
-        Dein Gebot wurde erfolgreich abgegeben!
-    </div>
-    <div class="error-message" id="errorMessage" style="display: none;">
-        Dein Gebot muss höher als das aktuelle Gebot sein!
-    </div>
-
     <script>
         const countdown = document.getElementById('countdown');
         const endDate = new Date('February 20, 2025 20:00:00').getTime();
@@ -111,27 +92,6 @@
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             countdown.innerHTML = `${days}T ${hours}h ${minutes}m ${seconds}s`;
         }, 1000);
-
-        // Startgebot
-        let currentBid = 25;
-
-        // Funktion zum Bearbeiten des Gebotsformulars
-        document.getElementById('bidForm').addEventListener('submit', function(event) {
-            event.preventDefault();  // Verhindert das Standard-Absenden des Formulars
-
-            const bidAmount = parseFloat(document.getElementById('bidAmount').value);
-
-            // Überprüfen, ob das Gebot höher als das aktuelle Gebot ist
-            if (bidAmount > currentBid) {
-                currentBid = bidAmount; // Setzt das neue Gebot als das aktuelle Gebot
-                document.getElementById('confirmationMessage').style.display = 'block'; // Zeigt die Bestätigungsnachricht an
-                document.getElementById('errorMessage').style.display = 'none'; // Versteckt die Fehlermeldung
-                document.querySelector('.bid-form').style.display = 'none'; // Versteckt das Formular nach dem Gebot
-            } else {
-                document.getElementById('errorMessage').style.display = 'block'; // Zeigt die Fehlermeldung an
-                document.getElementById('confirmationMessage').style.display = 'none'; // Versteckt die Bestätigungsnachricht
-            }
-        });
     </script>
 </body>
 </html>
