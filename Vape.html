@@ -5,93 +5,307 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HiFancy Vape Auktion</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            padding: 20px;
-            background: #f4f4f9;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            text-align: center;
         }
-        .product { 
-            max-width: 400px; 
-            margin: 0 auto; 
+        .container {
+            width: 400px;
             background: white;
             padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
-        img { 
-            max-width: 100%; 
-            border-radius: 20px; 
+        .product-img {
+            width: 100%;
+            border-radius: 10px;
         }
-        .countdown { 
-            font-size: 24px; 
-            margin: 20px 0; 
-            color: #ff3b30;
+        .description {
+            font-size: 14px;
+            color: black;
+            margin-top: 15px;
         }
-        .bid-form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
         }
-        .input-field {
-            background: #d3d3d3;
+        .input-box {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .bid-button {
+            background: #ff4d4d;
             color: white;
             border: none;
             padding: 10px;
-            width: 70%;
-            border-radius: 5px;
-            text-align: center;
-            box-sizing: border-box;
-        }
-        button { 
-            padding: 10px 20px; 
-            background: #4CAF50; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
+            width: 100%;
+            font-size: 18px;
             cursor: pointer;
-            transition: background 0.3s;
+            border-radius: 5px;
+            margin-top: 10px;
         }
-        button:hover {
-            background: #45a049;
+        .bid-button:hover {
+            background: #ff3333;
+        }
+        .bid-info {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .luxefinds {
+            font-size: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            position: relative;
+            animation: slideIn 4s ease-out forwards, waveEffect 1.5s infinite ease-in-out;
+        }
+
+        .luxefinds span:nth-child(1),
+        .luxefinds span:nth-child(2),
+        .luxefinds span:nth-child(3),
+        .luxefinds span:nth-child(4) {
+            color: #a54dff; 
+        }
+        .luxefinds span:nth-child(5),
+        .luxefinds span:nth-child(6),
+        .luxefinds span:nth-child(7),
+        .luxefinds span:nth-child(8),
+        .luxefinds span:nth-child(9) {
+            color: black;
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateX(-100%); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes waveEffect {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .luxefinds span {
+            display: inline-block;
+            animation: waveEffect 1.5s infinite ease-in-out;
+        }
+
+        .luxefinds span:nth-child(1) { animation-delay: 0s; }
+        .luxefinds span:nth-child(2) { animation-delay: 0.1s; }
+        .luxefinds span:nth-child(3) { animation-delay: 0.2s; }
+        .luxefinds span:nth-child(4) { animation-delay: 0.3s; }
+        .luxefinds span:nth-child(5) { animation-delay: 0.4s; }
+        .luxefinds span:nth-child(6) { animation-delay: 0.5s; }
+        .luxefinds span:nth-child(7) { animation-delay: 0.6s; }
+        .luxefinds span:nth-child(8) { animation-delay: 0.7s; }
+        .luxefinds span:nth-child(9) { animation-delay: 0.8s; }
+
+        .profile-selection {
+            margin-top: 15px;
+        }
+
+        .profile-selection h3 {
+            margin-bottom: 10px;
+        }
+
+        .profile-selection .profile-img-small.selected {
+            border: 2px solid #4caf50;
+            transform: scale(1.1);
+        }
+
+        .bid-list {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        .bid-list th, .bid-list td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .bid-list th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .bid-list tr:hover {
+            background-color: #e6f7ff;
+        }
+
+        .bid-list td {
+            font-size: 15px;
+            color: #333;
+        }
+
+        .bid-list tr:last-child td {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
-    <h1>HiFancy Vape Auktion</h1>
-    <div class="product">
-        <img src="IMG_6192.jpg" alt="HiFancy Vape">
-        <h2>Strawberry Mango Banana</h2>
-        <p>Letzte Vape auf Lager! Holt sie euch, sonst müsst ihr lange warten!</p>
-        <p>25'000 Puffs | 2% Nikotin</p>
-        <p><strong>Startgebot: 25 CHF</strong></p>
+
+    <div class="container">
+        <div class="luxefinds">
+            <span>L</span><span>u</span><span>x</span><span>e</span><span>F</span><span>i</span><span>n</span><span>d</span><span>s</span>
+        </div>
+
+        <h2 id="pageTitle">Anmeldung</h2>
+
+        <!-- Anmeldung & Profilbild Auswahl (nur sichtbar, bevor Anmeldung) -->
+        <div id="login-section">
+            <input type="text" id="username" class="input-box" placeholder="Benutzername">
+            <button class="bid-button" onclick="login()">Anmelden</button>
+            <div id="error-message" class="error-message"></div>
+        </div>
+
+        <!-- Produktbeschreibung & Auktion (wird erst nach der Anmeldung angezeigt) -->
+        <div id="auction-section" style="display: none;">
+            <div class="centered">
+                <!-- Entfernt das Profilbild -->
+                <p id="usernameDisplay"></p>
+            </div>
+
+            <img src="IMG_6192.jpg" alt="Produktbild" class="product-img"> <!-- Vape Bild hier -->
+            <p class="description">
+                Letzte Vape auf Lager! Holt sie euch, sonst müsst ihr lange warten!<br>
+                25'000 Puffs | 2% Nikotin
+            </p>
+            <p class="bid-info" id="currentBidLabel">Aktuelles Gebot: <span id="bid">25</span> CHF</p>
+
+            <div id="error-message" class="error-message"></div> <!-- Fehlermeldung hier platzieren -->
+
+            <input type="number" id="newBid" class="input-box" placeholder="Dein Gebot (CHF)">
+            <div id="bid-error-message" class="error-message"></div> <!-- Hier wird die Gebotsfehlernachricht angezeigt -->
+            <button class="bid-button" onclick="placeBid()">Bieten</button>
+
+            <!-- Button zum Zurücksetzen der Auktion, sichtbar nur für bestimmte Benutzer -->
+            <button class="bid-button" id="resetButton" style="display: none;" onclick="resetAuction()">Auktion Zurücksetzen</button>
+
+            <table class="bid-list" id="bidList">
+                <thead>
+                    <tr>
+                        <th>Bieter</th>
+                        <th>Gebot (CHF)</th>
+                        <th>Datum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Gebotsdaten werden hier dynamisch hinzugefügt -->
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="countdown" id="countdown">Loading...</div>
-    <form class="bid-form">
-        <input class="input-field" type="text" placeholder="Dein Name" required>
-        <input class="input-field" type="number" placeholder="Dein Gebot (CHF)" required min="25">
-        <button type="submit">Gebot abgeben</button>
-    </form>
+
     <script>
-        const countdown = document.getElementById('countdown');
-        const endDate = new Date('February 20, 2025 20:00:00').getTime();
-        const timer = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = endDate - now;
-            if (distance < 0) {
-                clearInterval(timer);
-                countdown.innerHTML = "Auktion beendet!";
-                document.querySelector('.bid-form').style.display = 'none';
+        let currentUser = "";
+        let bids = JSON.parse(localStorage.getItem('bids')) || [];  // Lädt gespeicherte Gebote
+
+        window.onload = function() {
+            updateBidList();
+        };
+
+        function login() {
+            let username = document.getElementById("username").value.trim();
+            if (username === "LF-NJT-4645" || username === "LF-Adrian-2674" || username === "LF-Tim-3748" || username === "LF-Samil-2736" || username === "LF-Mihajlo-2536" || username === "LF-Luana-8576" || username === "LF-Lyan-3546" || username === "LF-Liwia-2935") {
+                currentUser = username.replace('LF-', '');  // Entfernt 'LF-' aus dem Benutzernamen
+                document.getElementById("auction-section").style.display = "block";
+                document.getElementById("login-section").style.display = "none"; // Versteckt die Anmeldung
+                document.getElementById("pageTitle").innerText = "HiFancy Vape Auktion"; // Ändert den Titel nach der Anmeldung
+                document.getElementById("usernameDisplay").innerText = currentUser;
+                document.getElementById("error-message").innerText = "";
+
+                // Anzeige des Reset-Buttons für bestimmte Benutzer
+                if (username === "LF-Nevio" || username === "LF-Thierry") {
+                    document.getElementById("resetButton").style.display = "inline-block";
+                }
+            } else {
+                document.getElementById("error-message").innerText = "Zugriff verweigert! Wenn dies ein Fehler ist, melde dich bei +41 76 709 90 27.";
+            }
+        }
+
+        function placeBid() {
+            const bidValue = parseFloat(document.getElementById("newBid").value);
+            const bidErrorMessage = document.getElementById("bid-error-message");
+
+            if (isNaN(bidValue) || bidValue <= 0) {
+                bidErrorMessage.innerText = "Bitte gib ein gültiges Gebot ein!";
                 return;
             }
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            countdown.innerHTML = `${days}T ${hours}h ${minutes}m ${seconds}s`;
-        }, 1000);
+
+            // Holen des höchsten Gebots
+            let highestBid = Math.max(...bids.map(bid => bid.bid), 25); // Falls noch keine Gebote abgegeben wurden, starte mit 25 CHF
+
+            if (bidValue <= highestBid) {
+                bidErrorMessage.innerText = "Das Gebot muss höher als das aktuelle Gebot sein!";
+                return;
+            }
+
+            // Neues Gebot hinzufügen
+            const newBid = {
+                user: currentUser,
+                bid: bidValue,
+                time: new Date().toLocaleString()
+            };
+
+            bids.push(newBid);
+            localStorage.setItem('bids', JSON.stringify(bids)); // Speichert Gebote
+            updateBidList();
+            document.getElementById("newBid").value = "";  // Eingabefeld zurücksetzen
+            bidErrorMessage.innerText = "";  // Fehlernachricht zurücksetzen
+        }
+
+        function updateBidList() {
+            const bidListBody = document.getElementById("bidList").getElementsByTagName('tbody')[0];
+            bidListBody.innerHTML = "";  // Alle bestehenden Gebote löschen
+
+            if (bids.length > 0) {
+                let highestBid = Math.max(...bids.map(bid => bid.bid));
+                document.getElementById("currentBidLabel").innerText = `Aktuelles Gebot: ${highestBid} CHF`;
+
+                // Gebotsliste nach dem höchsten Gebot sortieren
+                bids.sort((a, b) => b.bid - a.bid);
+
+                bids.forEach(bid => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${bid.user}</td>
+                        <td>${bid.bid} CHF</td>
+                        <td>${bid.time}</td>
+                    `;
+                    bidListBody.appendChild(row);
+                });
+            } else {
+                document.getElementById("currentBidLabel").innerText = `Aktuelles Gebot: 25 CHF`;
+            }
+        }
+
+        function resetAuction() {
+            localStorage.removeItem('bids');  // Löscht die gespeicherten Gebote
+            bids = [];  // Setzt das Gebotsarray zurück
+            updateBidList();  // Setzt die Gebotsanzeige zurück
+            document.getElementById("currentBidLabel").innerText = `Aktuelles Gebot: 25 CHF`;  // Setzt das Startgebot zurück
+        }
     </script>
 </body>
 </html>
