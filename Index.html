@@ -161,6 +161,14 @@
         .bid-list tr:last-child td {
             border-bottom: none;
         }
+
+        /* Countdown Timer Style */
+        .timer {
+            font-size: 18px;
+            color: red;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -186,6 +194,8 @@
                 <p id="usernameDisplay"></p>
             </div>
 
+            <p id="timer" class="timer"></p>  <!-- Countdown Timer hier -->
+
             <img src="IMG_6192.jpg" alt="Produktbild" class="product-img"> <!-- Vape Bild hier -->
             <p class="description">
                 Letzte Vape auf Lager! Holt sie euch, sonst müsst ihr lange warten!<br>
@@ -199,7 +209,7 @@
             <div id="bid-error-message" class="error-message"></div> <!-- Hier wird die Gebotsfehlernachricht angezeigt -->
             <button class="bid-button" onclick="placeBid()">Bieten</button>
 
-            <!-- Button zum Zurücksetzen der Auktion, sichtbar nur für bestimmte Benutzer -->
+            <!-- Button zum Zurücksetzen der Auktion, sichtbar nur für LF-LuxeFinds3645 -->
             <button class="bid-button" id="resetButton" style="display: none;" onclick="resetAuction()">Auktion Zurücksetzen</button>
 
             <table class="bid-list" id="bidList">
@@ -221,13 +231,46 @@
         let currentUser = "";
         let bids = JSON.parse(localStorage.getItem('bids')) || [];  // Lädt gespeicherte Gebote
 
+        // Berechnet die verbleibende Zeit bis heute 16:00 Uhr
+        function calculateTimeRemaining() {
+            let now = new Date();
+            let targetTime = new Date();
+            targetTime.setHours(16, 0, 0, 0); // Setzt Zielzeit auf 16:00 Uhr
+
+            // Wenn die aktuelle Zeit nach 16:00 Uhr ist, setze das Ziel auf den nächsten Tag
+            if (now.getTime() > targetTime.getTime()) {
+                targetTime.setDate(targetTime.getDate() + 1);
+            }
+
+            let timeRemaining = targetTime - now;
+            return timeRemaining;
+        }
+
+        function startCountdown() {
+            const timerElement = document.getElementById("timer");
+            const interval = setInterval(function() {
+                let timeRemaining = calculateTimeRemaining();
+                if (timeRemaining <= 0) {
+                    clearInterval(interval);
+                    timerElement.innerText = "Auktion beendet!";
+                } else {
+                    let hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+                    let minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                    timerElement.innerText = `Verbleibende Zeit: ${hours}:${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+                }
+            }, 1000);
+        }
+
         window.onload = function() {
             updateBidList();
+            startCountdown();
         };
 
         function login() {
             let username = document.getElementById("username").value.trim();
-            if (username === "LF-NJT-4645" || username === "LF-Adrian-2674" || username === "LF-Tim-3748" || username === "LF-Samil-2736" || username === "LF-Mihajlo-2536" || username === "LF-Luana-8576" || username === "LF-Lyan-3546" || username === "LF-Liwia-2935") {
+            if (username === "LF-LuxeFinds3645" || username === "LF-Adrian8465" || username === "LF-Tim3645" || username === "LF-Sami6274" || username === "LF-Mihajlo3746" || username === "LF-Luana3675" || username === "LF-Lyan4766" || username === "LF-Liwia4756") {
                 currentUser = username.replace('LF-', '');  // Entfernt 'LF-' aus dem Benutzernamen
                 document.getElementById("auction-section").style.display = "block";
                 document.getElementById("login-section").style.display = "none"; // Versteckt die Anmeldung
@@ -235,8 +278,8 @@
                 document.getElementById("usernameDisplay").innerText = currentUser;
                 document.getElementById("error-message").innerText = "";
 
-                // Anzeige des Reset-Buttons für bestimmte Benutzer
-                if (username === "LF-Nevio" || username === "LF-Thierry") {
+                // Anzeige des Reset-Buttons nur für "LF-LuxeFinds3645"
+                if (username === "LF-LuxeFinds3645") {
                     document.getElementById("resetButton").style.display = "inline-block";
                 }
             } else {
@@ -287,9 +330,12 @@
                 bids.sort((a, b) => b.bid - a.bid);
 
                 bids.forEach(bid => {
+                    // Benutzername bereinigen (Zahlen entfernen)
+                    const cleanedUser = bid.user.replace(/\d+/g, '').replace('LF-', '');  // Entfernt alle Zahlen und 'LF-'
+
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                        <td>${bid.user}</td>
+                        <td>${cleanedUser}</td>  <!-- Bereinigter Benutzername -->
                         <td>${bid.bid} CHF</td>
                         <td>${bid.time}</td>
                     `;
